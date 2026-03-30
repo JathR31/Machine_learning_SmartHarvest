@@ -1,0 +1,47 @@
+{
+  "model_type": "RandomForestRegressor with Climate Data",
+  "training_date": "2026-02-05T11:33:49.041482",
+  "features": [
+    "MUNICIPALITY",
+    "FARM TYPE",
+    "MONTH",
+    "CROP",
+    "Area planted(ha)",
+    "Rain Value (mm)",
+    "Month_Num",
+    "Year_Num",
+    "lag_1",
+    "lag_2",
+    "lag_12",
+    "rolling_mean_3",
+    "rolling_std_3"
+  ],
+  "categorical_features": [
+    "MUNICIPALITY",
+    "FARM TYPE",
+    "MONTH",
+    "CROP"
+  ],
+  "numeric_features": [
+    "Area planted(ha)",
+    "Rain Value (mm)",
+    "Month_Num",
+    "Year_Num",
+    "lag_1",
+    "lag_2",
+    "lag_12",
+    "rolling_mean_3",
+    "rolling_std_3"
+  ],
+  "train_r2_score": 0.9690093018872433,
+  "test_r2_score": 0.9022174197453472,
+  "train_mae": 23.010434326606376,
+  "test_mae": 35.38547711718495,
+  "train_rmse": 140.72215486838112,
+  "test_rmse": 222.37871434605802,
+  "cv_mean_r2": 0.9042151084863752,
+  "cv_std_r2": 0.019896807794297054,
+  "n_estimators": 200,
+  "training_samples": 22480,
+  "test_samples": 5620
+}

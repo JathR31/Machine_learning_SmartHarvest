@@ -1,0 +1,58 @@
+{
+    "categorical_features": [
+        "MUNICIPALITY",
+        "FARM TYPE",
+        "MONTH",
+        "CROP"
+    ],
+    "numerical_features": [
+        "YEAR",
+        "Area planted(ha)"
+    ],
+    "feature_names": [
+        "cat__MUNICIPALITY_BAKUN",
+        "cat__MUNICIPALITY_BOKOD",
+        "cat__MUNICIPALITY_BUGUIAS",
+        "cat__MUNICIPALITY_ITOGON",
+        "cat__MUNICIPALITY_KABAYAN",
+        "cat__MUNICIPALITY_KAPANGAN",
+        "cat__MUNICIPALITY_KIBUNGAN",
+        "cat__MUNICIPALITY_LATRINIDAD",
+        "cat__MUNICIPALITY_MANKAYAN",
+        "cat__MUNICIPALITY_SABLAN",
+        "cat__MUNICIPALITY_TUBA",
+        "cat__MUNICIPALITY_TUBLAY",
+        "cat__FARM TYPE_RAINFED",
+        "cat__MONTH_AUG",
+        "cat__MONTH_DEC",
+        "cat__MONTH_FEB",
+        "cat__MONTH_JAN",
+        "cat__MONTH_JUL",
+        "cat__MONTH_JUN",
+        "cat__MONTH_MAR",
+        "cat__MONTH_MAY",
+        "cat__MONTH_NOV",
+        "cat__MONTH_OCT",
+        "cat__MONTH_SEP",
+        "cat__CROP_CABBAGE",
+        "cat__CROP_CARROTS",
+        "cat__CROP_CAULIFLOWER",
+        "cat__CROP_CHINESE CABBAGE",
+        "cat__CROP_GARDEN PEAS",
+        "cat__CROP_LETTUCE",
+        "cat__CROP_SNAP BEANS",
+        "cat__CROP_SWEET PEPPER",
+        "cat__CROP_WHITE POTATO",
+        "num__YEAR",
+        "num__Area planted(ha)"
+    ],
+    "model_features": [
+        "MUNICIPALITY",
+        "FARM TYPE",
+        "YEAR",
+        "MONTH",
+        "CROP",
+        "Area planted(ha)"
+    ],
+    "n_features": 35
+}

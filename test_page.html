@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML API Test - Benguet Crop Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .status {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .status-item {
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 14px;
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-dot.green {
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.red {
+            background: #dc3545;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        
+        .result h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .result-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .result-value {
+            float: right;
+            font-weight: 700;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 Benguet Crop Production Predictor</h1>
+            <p>Machine Learning Model Test Interface</p>
+        </div>
+        
+        <div class="status">
+            <div class="status-item">
+                <span class="status-dot red" id="statusDot"></span>
+                <span id="statusText">Checking API...</span>
+            </div>
+            <div class="status-item" id="modelInfo" style="display: none;">
+                Model: <strong id="modelType"></strong> (Accuracy: <strong id="modelScore"></strong>)
+            </div>
+        </div>
+        
+        <div class="content">
+            <form id="predictionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="municipality">Municipality</label>
+                        <select id="municipality" name="municipality" required>
+                            <option value="">Select Municipality</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="farm_type">Farm Type</label>
+                        <select id="farm_type" name="farm_type" required>
+                            <option value="">Select Farm Type</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="crop">Crop</label>
+                        <select id="crop" name="crop" required>
+                            <option value="">Select Crop</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="month">Month</label>
+                        <select id="month" name="month" required>
+                            <option value="">Select Month</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" min="2020" max="2030" value="2024" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="area_planted">Area Planted (hectares)</label>
+                        <input type="number" id="area_planted" name="area_planted" step="0.01" min="0" placeholder="e.g., 10.5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="area_harvested">Area Harvested (hectares)</label>
+                        <input type="number" id="area_harvested" name="area_harvested" step="0.01" min="0" placeholder="e.g., 10.0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productivity">Productivity (metric tons/hectare)</label>
+                    <input type="number" id="productivity" name="productivity" step="0.01" min="0" placeholder="e.g., 15.5" required>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">
+                    <span class="spinner hidden" id="spinner"></span>
+                    Predict Production
+                </button>
+            </form>
+            
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://127.0.0.1:5000';
+        
+        // Check API health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/api/health`);
+                const data = await response.json();
+                
+                document.getElementById('statusDot').className = 'status-dot green';
+                document.getElementById('statusText').textContent = 'API Connected';
+                document.getElementById('modelType').textContent = data.model_type;
+                document.getElementById('modelScore').textContent = '98.88%';
+                document.getElementById('modelInfo').style.display = 'inline-block';
+                
+                loadOptions();
+            } catch (error) {
+                document.getElementById('statusText').textContent = 'API Offline - Please start ml_api.py';
+                document.getElementById('statusDot').className = 'status-dot red';
+            }
+        }
+        
+        // Load available options
+        async function loadOptions() {
+            try {
+                const response = await fetch(`${API_URL}/api/available-options`);
+                const data = await response.json();
+                
+                // Populate municipalities
+                const municipalitySelect = document.getElementById('municipality');
+                data.municipalities.forEach(m => {
+                    const option = document.createElement('option');
+                    option.value = m;
+                    option.textContent = m;
+                    municipalitySelect.appendChild(option);
+                });
+                
+                // Populate farm types
+                const farmTypeSelect = document.getElementById('farm_type');
+                data.farm_types.forEach(f => {
+                    const option = document.createElement('option');
+                    option.value = f;
+                    option.textContent = f;
+                    farmTypeSelect.appendChild(option);
+                });
+                
+                // Populate crops
+                const cropSelect = document.getElementById('crop');
+                data.crops.forEach(c => {
+                    const option = document.createElement('option');
+                    option.value = c;
+                    option.textContent = c;
+                    cropSelect.appendChild(option);
+                });
+                
+                // Populate months
+                const monthSelect = document.getElementById('month');
+                data.months.forEach(m => {
+                    const option = document.createElement('option');
+                    option.value = m.value;
+                    option.textContent = m.label;
+                    monthSelect.appendChild(option);
+                });
+                
+            } catch (error) {
+                console.error('Failed to load options:', error);
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('spinner');
+            const resultDiv = document.getElementById('result');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.classList.remove('hidden');
+            resultDiv.style.display = 'none';
+            
+            try {
+                const formData = new FormData(e.target);
+                const data = {
+                    MUNICIPALITY: formData.get('municipality'),
+                    FARM_TYPE: formData.get('farm_type'),
+                    YEAR: parseInt(formData.get('year')),
+                    MONTH: parseInt(formData.get('month')),
+                    CROP: formData.get('crop'),
+                    Area_planted_ha: parseFloat(formData.get('area_planted')),
+                    Area_harvested_ha: parseFloat(formData.get('area_harvested')),
+                    Productivity_mt_ha: parseFloat(formData.get('productivity'))
+                };
+                
+                const response = await fetch(`${API_URL}/api/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Prediction Successful</h3>
+                        <div class="result-item">
+                            <span class="result-label">Predicted Production:</span>
+                            <span class="result-value">${result.prediction.production_mt} mt</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Expected from Productivity:</span>
+                            <span class="result-value">${result.prediction.expected_from_productivity} mt</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Difference:</span>
+                            <span class="result-value">${result.prediction.difference} mt</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Model Confidence:</span>
+                            <span class="result-value">${(result.prediction.confidence_score * 100).toFixed(2)}%</span>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ Prediction Failed</h3>
+                        <p>${result.error}</p>
+                    `;
+                }
+                
+                resultDiv.style.display = 'block';
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Network Error</h3>
+                    <p>${error.message}</p>
+                    <p>Make sure the Flask API is running (python ml_api.py)</p>
+                `;
+                resultDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        });
+        
+        // Check health on page load
+        checkHealth();
+    </script>
+</body>
+</html>

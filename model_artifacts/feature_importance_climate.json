@@ -1,0 +1,54 @@
+[
+  {
+    "feature": "rolling_mean_3",
+    "importance": 0.2583333820144736
+  },
+  {
+    "feature": "lag_12",
+    "importance": 0.24651911793267273
+  },
+  {
+    "feature": "rolling_std_3",
+    "importance": 0.182412661741064
+  },
+  {
+    "feature": "lag_1",
+    "importance": 0.1456667329644223
+  },
+  {
+    "feature": "lag_2",
+    "importance": 0.08121574376390624
+  },
+  {
+    "feature": "Area planted(ha)",
+    "importance": 0.031996221442789526
+  },
+  {
+    "feature": "Month_Num",
+    "importance": 0.011016118418808897
+  },
+  {
+    "feature": "MUNICIPALITY",
+    "importance": 0.00960919460875496
+  },
+  {
+    "feature": "CROP",
+    "importance": 0.009186706658786433
+  },
+  {
+    "feature": "Rain Value (mm)",
+    "importance": 0.00786667668723478
+  },
+  {
+    "feature": "MONTH",
+    "importance": 0.007679043642985305
+  },
+  {
+    "feature": "Year_Num",
+    "importance": 0.00560255977305055
+  },
+  {
+    "feature": "FARM TYPE",
+    "importance": 0.002895840351050515
+  }
+]

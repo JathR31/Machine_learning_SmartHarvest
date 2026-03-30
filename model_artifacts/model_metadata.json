@@ -1,0 +1,31 @@
+{
+    "model_type": "Random Forest Regressor (Crop-Sensitive)",
+    "best_params": {
+        "max_depth": 50,
+        "min_samples_split": 5,
+        "n_estimators": 200
+    },
+    "training_date": "2025-11-06 20:42:07.740029",
+    "target_variable": "Production(mt)",
+    "input_features": [
+        "MUNICIPALITY",
+        "FARM TYPE",
+        "YEAR",
+        "MONTH",
+        "CROP",
+        "Area planted(ha)"
+    ],
+    "categorical_features": [
+        "MUNICIPALITY",
+        "FARM TYPE",
+        "MONTH",
+        "CROP"
+    ],
+    "n_samples_train": 24676,
+    "best_cv_score": 0.6378078859611709,
+    "test_r2_score": 0.6816563807710498,
+    "test_mae": 96.36896865700031,
+    "test_rmse": 383.7780333897553,
+    "crop_importance": 0.07778504867685077,
+    "note": "Retrained without Area_harvested and Productivity to improve crop sensitivity"
+}
